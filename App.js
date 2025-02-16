@@ -3,7 +3,11 @@ import { useEffect, useState } from "react";
 import { Button, View, Text } from "react-native";
 import * as WebBrowser from "expo-web-browser";
 import { initializeApp } from "firebase/app";
-import { GoogleAuthProvider, onAuthStateChanged } from "firebase/auth";
+import {
+  GoogleAuthProvider,
+  onAuthStateChanged,
+  signInWithCredential,
+} from "firebase/auth";
 
 import { initializeAuth, getReactNativePersistence } from "firebase/auth";
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
@@ -14,13 +18,13 @@ WebBrowser.maybeCompleteAuthSession();
 
 // Firebase Config (Firebase Console'dan al)
 const firebaseConfig = {
-  apiKey: "AIzaSyB1Sg1c8LKwp8162aQO9Ws48AqjzXBmpS8",
-  authDomain: "ninja-ddda1.firebaseapp.com",
-  databaseURL: "https://ninja-ddda1.firebaseio.com",
-  projectId: "ninja-ddda1",
-  storageBucket: "ninja-ddda1.firebasestorage.app",
-  messagingSenderId: "491406833717",
-  appId: "1:491406833717:web:d24c9b389eb48149dad97c",
+  apiKey: "AIzaSyBQBeJUrdt99QuihLgTPtv9HpPebsUt7qU",
+  authDomain: "elevated-column-445717-h4.firebaseapp.com",
+  projectId: "elevated-column-445717-h4",
+  storageBucket: "elevated-column-445717-h4.firebasestorage.app",
+  messagingSenderId: "580447110631",
+  appId: "1:580447110631:web:2a41bf1ee57eb266c9a942",
+  measurementId: "G-F4K4PTP5TE",
 };
 
 const app = initializeApp(firebaseConfig);
@@ -34,9 +38,9 @@ export default function GoogleSignIn() {
 
   const [request, response, promptAsync] = Google.useAuthRequest({
     expoClientId:
-      "580447110631-vvv3d82c0e3sotaeacnkigi5cu2ks62a.apps.googleusercontent.com",
+      "491406833717-90gbg1j16188d120j6u6gcob6723eha2.apps.googleusercontent.com",
     webClientId:
-      "580447110631-vvv3d82c0e3sotaeacnkigi5cu2ks62a.apps.googleusercontent.com",
+      "491406833717-90gbg1j16188d120j6u6gcob6723eha2.apps.googleusercontent.com",
     iosClientId:
       "580447110631-esckavplmrljkgnf5v299aerufajuvdb.apps.googleusercontent.com",
     androidClientId:
@@ -45,7 +49,7 @@ export default function GoogleSignIn() {
 
   useEffect(() => {
     const unsubscrible = onAuthStateChanged(auth, (currentUser) => {
-      console.log(currentUser);
+      console.log("currentUser: ", currentUser);
     });
     return () => {
       unsubscrible();
