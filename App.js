@@ -2,36 +2,14 @@ import * as Google from "expo-auth-session/providers/google";
 import { useEffect, useState } from "react";
 import { Button, View, Text } from "react-native";
 import * as WebBrowser from "expo-web-browser";
-import { initializeApp } from "firebase/app";
 import {
   GoogleAuthProvider,
   onAuthStateChanged,
   signInWithCredential,
 } from "firebase/auth";
-
-import { initializeAuth, getReactNativePersistence } from "firebase/auth";
-import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
-
-//import { initializeApp } from "firebase/app";
+import { auth } from "./firebaseConfig"; // Firebase ayarlarını içe aktar
 
 WebBrowser.maybeCompleteAuthSession();
-
-// Firebase Config (Firebase Console'dan al)
-const firebaseConfig = {
-  apiKey: "AIzaSyBQBeJUrdt99QuihLgTPtv9HpPebsUt7qU",
-  authDomain: "elevated-column-445717-h4.firebaseapp.com",
-  projectId: "elevated-column-445717-h4",
-  storageBucket: "elevated-column-445717-h4.firebasestorage.app",
-  messagingSenderId: "580447110631",
-  appId: "1:580447110631:web:2a41bf1ee57eb266c9a942",
-  measurementId: "G-F4K4PTP5TE",
-};
-
-const app = initializeApp(firebaseConfig);
-
-const auth = initializeAuth(app, {
-  persistence: getReactNativePersistence(ReactNativeAsyncStorage),
-});
 
 export default function GoogleSignIn() {
   const [user, setUser] = useState(null);
@@ -48,12 +26,11 @@ export default function GoogleSignIn() {
   });
 
   useEffect(() => {
-    const unsubscrible = onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       console.log("currentUser: ", currentUser);
+      setUser(currentUser);
     });
-    return () => {
-      unsubscrible();
-    };
+    return unsubscribe;
   }, []);
 
   const [userInfo, setUserInfo] = useState();
@@ -68,19 +45,10 @@ export default function GoogleSignIn() {
     console.log(response?.params);
   }, [response]);
 
-  console.log(userInfo);
-
   return (
-    <View
-      style={{
-        flex: 1,
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: "blue",
-      }}
-    >
+    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
       <Button title="Google ile Giriş Yap" onPress={() => promptAsync()} />
-      {user && <Text>Giriş Yapan: {user.displayName}</Text>}
+      {user && <Text>Giriş Yapan: {user?.displayName}</Text>}
     </View>
   );
 }
